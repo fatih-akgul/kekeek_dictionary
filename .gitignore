@@ -1,0 +1,9 @@
+### Pycharm ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### Custom
+QuestLog.md
+env.*
