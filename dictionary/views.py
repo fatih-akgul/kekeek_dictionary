@@ -1,3 +1,6 @@
+from django.http import HttpResponse
 from django.shortcuts import render
 
-# Create your views here.
+
+def lookup(request, word):
+    return HttpResponse("Meaning of %s is 42" % word)
