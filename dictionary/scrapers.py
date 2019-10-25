@@ -92,18 +92,25 @@ class WiktionaryTrEnScraper(Scraper):
         return False
 
     @staticmethod
-    def get_pronunciation(header: BeautifulSoup) -> [Dict[str, Any]]:
+    def get_pronunciation(header: BeautifulSoup) -> List[Dict[str, Any]]:
         results = []
         if header.find_next_sibling().name == 'ul':
             ul: BeautifulSoup = header.find_next_sibling()
-            values = ul.find_all('span', class_='IPA')
-            if values:
-                results.append({
-                    'type': 'IPA',
-                    'values': [span.text for span in values]
-                })
-
+            WiktionaryTrEnScraper.get_pronunciation_type(ul, results, 'IPA', 'IPA')
+            WiktionaryTrEnScraper.get_pronunciation_type(ul, results, 'Hyphenation', 'Latn')
         return results
+
+    @staticmethod
+    def get_pronunciation_type(ul: BeautifulSoup,
+                               results: List[Dict[str, Any]],
+                               pronunciation_type: str,
+                               css_class: str):
+        values = ul.find_all('span', class_=css_class)
+        if values:
+            results.append({
+                'type': pronunciation_type,
+                'values': [span.text for span in values]
+            })
 
     @staticmethod
     def is_etymology_header(header: BeautifulSoup) -> bool:
